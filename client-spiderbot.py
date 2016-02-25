@@ -1,7 +1,8 @@
 from twisted.internet import reactor, protocol
 from ClassLibrary.client_tool_watcher import client_tool_watcher
-import atexit, time
 import LeapControllers.leap as leap
+import atexit
+import time
 
 listener = client_tool_watcher()
 controller = leap.Controller()
@@ -19,14 +20,14 @@ class ClientProtocol(protocol.Protocol):
 
     def sendData(self):
         self.transport.write(data)
-        #time.sleep(0.04) ## Uncomment when using home machine as host
+        #  time.sleep(0.04) ## Uncomment when using home machine as host
 
     def SendModData(self):
         self.transport.write(listener.compString)
 
     def dataReceived(self, data):
         print "Server Response:\n", data
-        #time.sleep(0.004) ## Uncomment when using home machine as host
+        #  time.sleep(0.004) ## Uncomment when using home machine as host
         self.SendModData()
 
 class Factory(protocol.ClientFactory):

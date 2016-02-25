@@ -59,7 +59,7 @@ class Echo(protocol.Protocol):
         # a Technical Test File until the next Technical Test.
         if test == "Y":
 
-            current_frame = server_data_handler  # Create instance object for the current frame
+            current_frame = server_data_handler()  # Create instance object for the current frame
 
             if str(data)[:4] == 'cli_':  # Receiving data from the remote Leap computer
 
