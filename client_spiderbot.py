@@ -1,14 +1,15 @@
 from twisted.internet import reactor, protocol
-from ClassLibrary.client_tool_watcher import client_tool_watcher
+from ClassLibrary.client_tool_watcher import Client_Tool_Watcher
 import LeapControllers.leap as leap
 import atexit
 import time
 
-listener = client_tool_watcher()
+listener = Client_Tool_Watcher()
 controller = leap.Controller()
 controller.add_listener(listener)
 
 print 'Starting...'
+
 
 class ClientProtocol(protocol.Protocol):
 
@@ -30,6 +31,7 @@ class ClientProtocol(protocol.Protocol):
         #  time.sleep(0.004) ## Uncomment when using home machine as host
         self.SendModData()
 
+
 class Factory(protocol.ClientFactory):
 
     def __init__(self, data):
@@ -45,6 +47,7 @@ class Factory(protocol.ClientFactory):
     def clientConnectionLost(self, connector, reason):
         print "Connection lost."
         #reactor.stop()
+
 
 def exit_handler():
     print "Exiting..."

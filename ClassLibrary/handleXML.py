@@ -87,3 +87,5 @@ class XMLhandler():
         output_file = open('tmp/XML_' + self.docName + '.xhtml', 'w')
         output_file.write(reparsed.toprettyxml(indent= "    "))
         output_file.close()
+
+        print "Data Saved. Exiting."

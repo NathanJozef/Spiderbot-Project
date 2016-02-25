@@ -3,16 +3,16 @@ import LeapControllers.leap as leap
 def create():
 
     # Create a sample listener and controller
-    listener = client_tool_watcher
+    listener = Client_Tool_Watcher
     controller = leap.Controller()
     controller.add_listener(listener)
 
-class client_tool_watcher(leap.Listener):
+class Client_Tool_Watcher(leap.Listener):
 
     def buildForUI(self):
 
-        self._COUNTER = 0
-        self.frame = str(self._COUNTER).zfill(10)
+        self.COUNTER = 0
+        self.frame = str(self.COUNTER).zfill(10)
         self.xPos = 0
         self.yPos = 0
         self.zPos = 0
