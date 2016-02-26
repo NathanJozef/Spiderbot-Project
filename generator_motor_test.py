@@ -18,9 +18,9 @@ def generator(test_instance):
         def __init__(self, ax, listener, test_instance):
 
             if test_instance.testtype == 0:
-                self.test = mt.SimpleLineTest(ax, listener)
+                self.test = mt.SimpleLineTest(ax, listener, test_instance)
             elif test_instance.testtype == 1:
-                self.test = mt.DiagonalLineTest(ax, listener)
+                self.test = mt.DiagonalLineTest(ax, listener, test_instance)
 
         def update(self, postion_corodinates):
 

@@ -1,3 +1,6 @@
+import time
+import datetime
+
 class TestBuilder:
 
     switcher = {
@@ -28,3 +31,12 @@ class TestBuilder:
 
     def tests(self, a):
         return TestBuilder.switcher.get(a)
+
+    def create_test_filename(self):
+
+        filename = self.name + '_' \
+                   + self.conditions + '_' \
+                   + self.profession + '_' \
+                   + self.tests(self.testtype) + '_' \
+                   + time.strftime('%c')
+        return filename
