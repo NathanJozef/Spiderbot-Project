@@ -58,7 +58,7 @@ atexit.register(exit_handler)
 if __name__ == "__main__":
     data = "cli_0000000_0000000_0000000_0000000_0000000_0000000"
 
-    reactor.connectTCP('54.194.135.20', 8000, Factory(data))
+    reactor.connectTCP('kebaiz.com', 8080, Factory(data))
     #reactor.connectTCP('<Insert Home Machine Name>', 8000, Factory(data))
 
     reactor.run()

@@ -2,7 +2,7 @@ import xml.etree.ElementTree as ET
 from xml.dom import minidom
 
 
-class XMLhandler():
+class Operation_XML_Builder():
 
     def __init__(self, filename):
 
@@ -13,7 +13,10 @@ class XMLhandler():
         self.root = ET.Element('Test')
         self.tree = ET.ElementTree(self.root)
 
-    def append2XML(self, object):
+        self.tests = ET.Element("TestFrames")
+        self.root.append(self.tests)
+
+    def append_user_movement_data_to_xml(self, object):
 
         frame = object.frame
         xPos = object.xPos
@@ -30,7 +33,7 @@ class XMLhandler():
 
         self.dataPoint = ET.Element("Frame")
         self.dataPoint.set('key', str(frame))
-        self.root.append(self.dataPoint)
+        self.tests.append(self.dataPoint)
 
         self.xPosElement = ET.Element("xPos")
         self.xPosElement.text = str(xPos)
@@ -89,3 +92,57 @@ class XMLhandler():
         output_file.close()
 
         print "Data Saved. Exiting."
+
+
+class Test_XML_Builder(Operation_XML_Builder):
+
+    def save_test_parameters_to_xml(self, test_object):
+
+        testee = test_object.test_instance.name
+        conditions = test_object.test_instance.conditions
+        profession = test_object.test_instance.profession
+        testtype = test_object.test_instance.tests(test_object.test_instance.testtype)
+        axisheight = test_object.axis_height
+        axiswidth = test_object.axis_width
+        testlength = test_object.test_length
+        boundary = test_object.boundary
+
+        self.testeeinfo = ET.Element("TestSubjectInformation")
+        self.testeeinfo.text = str("")
+        self.root.append(self.testeeinfo)
+
+        self.testee = ET.Element("Testee")
+        self.testee.text = str(testee)
+        self.testeeinfo.append(self.testee)
+
+        self.conditions = ET.Element("Conditions")
+        self.conditions.text = str(conditions)
+        self.testeeinfo.append(self.conditions)
+
+        self.profession = ET.Element("Profession")
+        self.profession.text = str(profession)
+        self.testeeinfo.append(self.profession)
+
+        self.testinfo = ET.Element("TestInformation")
+        self.testinfo.text = str("")
+        self.root.append(self.testinfo)
+
+        self.testtype = ET.Element("Test")
+        self.testtype.text = str(testtype)
+        self.testinfo.append(self.testtype)
+
+        self.axis_height = ET.Element("AxisHeight")
+        self.axis_height.text = str(axisheight)
+        self.testinfo.append(self.axis_height)
+
+        self.axis_width = ET.Element("AxisWidth")
+        self.axis_width.text = str(axiswidth)
+        self.testinfo.append(self.axis_width)
+
+        self.test_length = ET.Element("TestLength")
+        self.test_length.text = str(testlength)
+        self.testinfo.append(self.test_length)
+
+        self.boundary = ET.Element("Boundary")
+        self.boundary.text = str(boundary)
+        self.testinfo.append(self.boundary)

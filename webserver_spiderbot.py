@@ -1,5 +1,5 @@
 from twisted.internet import protocol, reactor
-from ClassLibrary.handleXML import XMLhandler
+from ClassLibrary.xml_builder import Operation_XML_Builder
 from ClassLibrary.server_data_handler import server_data_handler
 import pickle, atexit
 
@@ -11,7 +11,7 @@ print ""
 
 test = 'Y'
 
-XMLFrame = XMLhandler('Server_Tx')
+XMLFrame = Operation_XML_Builder('Server_Tx')
 XMLFrame.createXMLfile()
 
 atexit.register(XMLFrame.exit_handler)
@@ -76,18 +76,12 @@ class Echo(protocol.Protocol):
             current_frame.frame = str(current_frame.frame).zfill(10)
 
             print current_frame.__str__() # Print the current data to the Server Terminal
-            XMLFrame.append2XML(current_frame)
+            XMLFrame.append_user_movement_data_to_xml(current_frame)
 
             if str(data)[:4] == 'cli_':
                 self.transport.write(current_frame.__str__())  # Send the current data to the client for confirmation
             elif str(data)[:4] == 'lab_':
                 self.transport.write(labview_pos_string)
-
-        # This is recorded test for actual experimental tests
-        if test == "N":
-
-            if str(data)[:4] == 'cli_':
-                print "RECORDED TEST: Client said:", data
 
 
 class EchoFactory(protocol.Factory):
@@ -97,7 +91,7 @@ class EchoFactory(protocol.Factory):
 
 print "Awaiting Connection..."
 
-reactor.listenTCP(8000, EchoFactory())
+reactor.listenTCP(8080, EchoFactory())
 
 reactor.run()
 
