@@ -314,51 +314,90 @@ def diagonal_line_test_analysis():
 
 def move_to_dot_test_analysis():
 
-    test_list = [[], [], [], [], [], [], [], []]
-    accuracy_list = [[], []]
+    coefficient_selection_point = 0.8  # Select the point in the list to take the coefficient point. Select between 0 and 1. Higher numbers increase velocity
+    listOfReds = [[], [], [], [], [], [], [], [], [] ,[], [], []]
+    listOfYellows = [[], [], [], [], [], [], [], [], [], [], [], []]
+    spot_list = [[], []]
+
+    def appendColourLists(colourList):
+
+        colourList[0].append(xPosition)
+        colourList[1].append(yPosition)
+        colourList[2].append(xVelocity)
+        colourList[3].append(yVelocity)
+        colourList[4].append(XPosCurrentSpot)
+        colourList[5].append(YPosCurrentSpot)
+        colourList[6].append(distFromSpot)
+        colourList[7].append(xMemoryVelocity)
+        colourList[8].append(yMemoryVelocity)
+        colourList[9].append(memoryVelocityVector)
+        colourList[10].append(x_dist_from_spot)
+        colourList[11].append(y_dist_from_spot)
 
     for child in e[0]:
 
         frame = int(child.attrib['key'])
-        xPosition = child.find('xPos').text
-        yPosition = child.find('yPos').text
-        xVelocity = child.find('xVel').text
-        yVelocity = child.find('yVel').text
+        xPosition = float(child.find('xPos').text)
+        yPosition = float(child.find('yPos').text)
+        xVelocity = float(child.find('xVel').text)
+        yVelocity = float(child.find('yVel').text)
         colour = child.find('Colour').text
-        XPosCurrentSpot = child.find('TransientTestData')[0].text
-        YPosCurrentSpot = child.find('TransientTestData')[1].text
+        XPosCurrentSpot = float(child.find('TransientTestData')[0].text)
+        YPosCurrentSpot = float(child.find('TransientTestData')[1].text)
         distFromSpot = np.sqrt((np.square(float(XPosCurrentSpot) - float(xPosition)) +
                                 np.square(float(YPosCurrentSpot) - float(yPosition))))
-        velocityVector = np.sqrt(np.square(float(xVelocity)) + np.square(float(yVelocity)))
+        xMemoryVelocity = float(child.find('xMemoryVelocity').text)
+        yMemoryVelocity = float(child.find('yMemoryVelocity').text)
+        memoryVelocityVector = np.sqrt((np.square(xMemoryVelocity) + np.square(yMemoryVelocity)))
+        x_dist_from_spot = np.absolute(xPosition - XPosCurrentSpot)
+        y_dist_from_spot = np.absolute(yPosition - YPosCurrentSpot)
 
-        test_list[0].append(float(xPosition))
-        test_list[1].append(float(yPosition))
-        test_list[2].append(float(xVelocity))
-        test_list[3].append(float(yVelocity))
-        test_list[4].append(int(XPosCurrentSpot))
-        test_list[5].append(int(YPosCurrentSpot))
-        test_list[6].append(distFromSpot)
-        test_list[7].append(velocityVector)
+        spot_list[0].append(XPosCurrentSpot)
+        spot_list[1].append(YPosCurrentSpot)
 
-        if distFromSpot <= boundary:
-            accuracy_list[0].append(distFromSpot)
-            accuracy_list[1].append(velocityVector)
+        if colour == 'R':
+            colourList = listOfReds
+            appendColourLists(colourList)
+        elif colour == 'Y':
+            colourList = listOfYellows
+            appendColourLists(colourList)
 
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(30, 10))
+    fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(30, 10))
 
     ax1.axis([0, int(axis_width), 0, int(axis_height)])
     ax1.set_xlabel('X Displacement')
     ax1.set_ylabel('Y Displacement')
-    ax1.plot(test_list[4], test_list[5], 'bo', markersize=boundary)
-    ax1.plot(test_list[0], test_list[1], 'ro')
+    ax1.plot(spot_list[0], spot_list[1], 'bs', markersize=boundary)
+    ax1.plot(listOfReds[0], listOfReds[1], 'ro')
+    ax1.plot(listOfYellows[0], listOfYellows[1], 'yo')
 
-    ax2.axis([0, max(accuracy_list[0]) + 10.0, 0, max(accuracy_list[1]) + (float(max(accuracy_list[1])) * 0.1)])
+    ax2.axis([0, max(listOfReds[6]) + 10.0, 0, max(listOfReds[9]) + 10])
     ax2.set_xlabel('Distance from Spot')
     ax2.set_ylabel('Velocity Vector')
-    ax2.plot(accuracy_list[0], accuracy_list[1], 'ro')
+    ax2.plot(listOfReds[6], listOfReds[9], 'ro')
+    ax2.plot(listOfYellows[6], listOfYellows[9], 'yo')
 
-    plt.show()
+    ax3.axis([0, max(listOfReds[10]) + 10.0, 0, max(listOfReds[7]) + 10])
+    ax3.set_xlabel('X Distance from Spot')
+    ax3.set_ylabel('X Velocity Vector')
+    ax3.plot(listOfReds[10], listOfReds[7], 'ro')
+    ax3.plot(listOfYellows[10], listOfYellows[7], 'yo')
 
+    ax4.axis([0, max(listOfReds[11]) + 10.0, 0, max(listOfReds[8]) + 10])
+    ax4.set_xlabel('Y Distance from Spot')
+    ax4.set_ylabel('Y Velocity Vector')
+    ax4.plot(listOfReds[11], listOfReds[8], 'ro')
+    ax4.plot(listOfYellows[11], listOfYellows[8], 'yo')
+
+    listOfYellows[7].sort()
+    listOfYellows[8].sort()
+    x_coefficient_point = listOfYellows[7][(int(float(len(listOfYellows[7])) * coefficient_selection_point)) - 1]
+    y_coefficient_point = listOfYellows[8][(int(float(len(listOfYellows[8])) * coefficient_selection_point)) - 1]
+
+    ax3.plot([0, max(listOfReds[10])], [x_coefficient_point, x_coefficient_point], 'g--', linewidth=3.0)
+    ax4.plot([0, max(listOfReds[11])], [y_coefficient_point, y_coefficient_point], 'g--', linewidth=3.0)
+
+    return x_coefficient_point, y_coefficient_point
 
 
 
@@ -406,6 +445,12 @@ elif test == TestBuilder.switcher.get(2):
     diagonal_line_test_analysis()
 
 elif test == TestBuilder.switcher.get(3):
-    move_to_dot_test_analysis()
+
+    coefficients = move_to_dot_test_analysis()
+    print '\nThe Coefficients for that test are as follows:', coefficients
+    updater = raw_input("\nType Y to update coeffcients. Otherwise press enter to view data\n")
+    user_profile = Profiler(testee)
+    if updater == 'Y':
+        user_profile.write_accuracy_coefficients(coefficients)
 
 plt.show()

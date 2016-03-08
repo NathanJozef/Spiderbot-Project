@@ -24,7 +24,7 @@ def generator(test_instance):
             elif test_instance.testtype == 2:
                 self.test = mt.Diagonal_Line_Validation(ax, listener, test_instance)
             elif test_instance.testtype == 3:
-                self.test = mt.Move_To_Dots_Test(ax, listener, test_instance)
+                self.test = mt.Accuracy_Test(ax, listener, test_instance)
 
         def update(self, postion_corodinates):
 

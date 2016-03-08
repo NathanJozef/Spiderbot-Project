@@ -9,8 +9,7 @@ class Profiler():
         self.profile_filename = 'Profile_' + self.testee
         self.linear_coefficients = [1, 1, 1]
         self.vertical_coefficients = [1, 1, 1]
-        self.diagonal_coefficients = [1, 1, 1]
-        self.accuracy_coefficients = [1, 1, 1]
+        self.accuracy_coefficients = [1, 1]
 
         if os.path.exists('Profiles/' + self.profile_filename):
             self.open_existing_file()
@@ -24,7 +23,7 @@ class Profiler():
 
     def write_linear_coefficients(self, coefficients):
 
-        print '\nUpdating linear Coefficients\n'
+        print '\nUpdating Linear Coefficients\n'
 
         if self.linear_coefficients == [1, 1, 1]:
             self.linear_coefficients[0] = float('{0:.2f}'.format(coefficients[0]))
@@ -39,7 +38,7 @@ class Profiler():
 
     def write_vertical_coefficients(self, coefficients):
 
-        print '\nUpdating vertical Coefficients\n'
+        print '\nUpdating Vertical Coefficients\n'
 
         if self.vertical_coefficients == [1, 1, 1]:
             self.vertical_coefficients[0] = float('{0:.2f}'.format(coefficients[0]))
@@ -49,6 +48,19 @@ class Profiler():
             self.vertical_coefficients[0] = float('{0:.2f}'.format((coefficients[0] + self.vertical_coefficients[0]) / 2))
             self.vertical_coefficients[1] = float('{0:.2f}'.format((coefficients[1] + self.vertical_coefficients[1]) / 2))
             self.vertical_coefficients[2] = float('{0:.2f}'.format((coefficients[2] + self.vertical_coefficients[2]) / 2))
+
+        self.save_to_picklefile()
+
+    def write_accuracy_coefficients(self, coefficients):
+
+        print '\nUpdating Accuracy Coefficients\n'
+
+        if self.accuracy_coefficients == [1, 1]:
+            self.accuracy_coefficients[0] = float('{0:.2f}'.format(coefficients[0]))
+            self.accuracy_coefficients[1] = float('{0:.2f}'.format(coefficients[1]))
+        elif self.accuracy_coefficients != [1, 1]:
+            self.accuracy_coefficients[0] = float('{0:.2f}'.format((coefficients[0] + self.accuracy_coefficients[0]) / 2))
+            self.accuracy_coefficients[1] = float('{0:.2f}'.format((coefficients[1] + self.accuracy_coefficients[1]) / 2))
 
         self.save_to_picklefile()
 

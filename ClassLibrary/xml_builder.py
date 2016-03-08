@@ -153,7 +153,15 @@ class Test_XML_Builder(Operation_XML_Builder):
 
         testtype = test_object.test_instance.testtype
 
-        if str(testtype) == "2":
+        if str(testtype) == "3":
+
+            self.xMemoryVelocity = ET.Element("xMemoryVelocity")
+            self.xMemoryVelocity.text = str(test_object.averageXVels)
+            self.dataPoint.append(self.xMemoryVelocity)
+
+            self.yMemoryVelocity = ET.Element("yMemoryVelocity")
+            self.yMemoryVelocity.text = str(test_object.averageYVels)
+            self.dataPoint.append(self.yMemoryVelocity)
 
             self.transient = ET.Element("TransientTestData")
             self.transient.text = str("")

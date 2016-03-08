@@ -10,7 +10,7 @@ class TestBuilder:
         0: "Horizontal Line Test",
         1: "Vertical Line Test",
         2: "Diagonal Line Validation",
-        3: "Move To Dots Test"
+        3: "Accuracy Test"
         }
 
     def __init__(self):
@@ -32,7 +32,6 @@ class TestBuilder:
 
         self.linear_coefficients = characteristic_profile.linear_coefficients
         self.vertical_coefficients = characteristic_profile.vertical_coefficients
-        self.diagonal_coefficients = characteristic_profile.diagonal_coefficients
         self.accuracy_coefficients = characteristic_profile.accuracy_coefficients
 
     def __str__(self):
@@ -41,8 +40,8 @@ class TestBuilder:
                + 'Conditions: ' + self.conditions + '\n' \
                + 'Profession: ' + self.profession + '\n' \
                + 'Test Type: ' + self.tests(self.testtype) + '\n' \
-               + 'Linear Test Coefficients: ' + str(self.linear_coefficients) + '\n' \
-               + 'Diagonal Test Coefficients: ' + str(self.diagonal_coefficients) + '\n' \
+               + 'Horizontal Test Coefficients: ' + str(self.linear_coefficients) + '\n' \
+               + 'Vertical Test Coefficients: ' + str(self.vertical_coefficients) + '\n' \
                + 'Accuracy Coefficients: ' + str(self.accuracy_coefficients) + '\n'
 
     def tests(self, a):

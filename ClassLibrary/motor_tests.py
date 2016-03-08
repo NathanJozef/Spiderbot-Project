@@ -1,6 +1,7 @@
 from ClassLibrary.xml_builder import Test_XML_Builder
 import atexit
 import numpy as np
+from collections import deque
 
 #  Super Class that implements only one methods, the BuildTestXML method.
 #  This ensures test files are annoted correctly with the test details
@@ -337,7 +338,7 @@ class Diagonal_Line_Validation(TestBuilder):
         return self
 
 
-class Move_To_Dots_Test(TestBuilder):
+class Accuracy_Test(TestBuilder):
 
     def __init__(self, ax, listener, test_instance):
 
@@ -348,30 +349,71 @@ class Move_To_Dots_Test(TestBuilder):
         self.ax = ax
         self.rand_x = np.random.random_integers(0, self.axis_height * 0.5)
         self.rand_y = np.random.random_integers(0, self.axis_height * 0.5)
+        self.xVelQueue = [0, 0, 0, 0, 0]
+        self.yVelQueue = [0, 0, 0, 0, 0]
+        self.averageXVels = 0
+        self.averageYVels = 0
 
         #  Build the test frame
         self.ax.axis([0, self.axis_width, 0, self.axis_height])
-        self.ax.plot([self.rand_x + 100, self.rand_x + 100], [self.rand_y + 100, self.rand_y + 100], 'bo',
-                     markersize=30)
-        self.point = self.ax.plot(self.xData, self.yData, 'ro', markersize=self.boundary)
+        self.ax.plot([self.rand_x + 100, self.rand_x + 100], [self.rand_y + 100, self.rand_y + 100], 'bs',
+                     markersize=self.boundary)
+        self.point = self.ax.plot(self.xData, self.yData, 'ro', markersize=10)
 
         self.XMLBuilder.save_test_parameters_to_xml(self)
 
     def update(self, list):
 
+        self.oldXData = self.xData
+        self.oldYData = self.yData
+
         self.ax.lines.remove(self.ax.lines[1])
-        self.xData[0] = self.listener.xPos
-        self.yData[0] = self.listener.yPos
+        self.xData = self.listener.xPos
+        self.yData = self.listener.yPos
+
+        self.xVelQueue.pop(0)
+        self.xVelQueue.append(float('{0:.2f}'.format(np.absolute(self.listener.xVel))))
+        self.yVelQueue.pop(0)
+        self.yVelQueue.append(float('{0:.2f}'.format(np.absolute(self.listener.yVel))))
+        self.averageXVels = sum(self.xVelQueue) / len(self.xVelQueue)
+        self.averageYVels = sum(self.yVelQueue) / len(self.yVelQueue)
+
+        if self.averageXVels < self.test_instance.accuracy_coefficients[0] and \
+            self.averageYVels < self.test_instance.accuracy_coefficients[1]:
+
+            print 'X Pos Modified:', self.xData - self.oldXData
+            print 'Y Pos Modified:', self.yData - self.oldYData
+
+            self.xData = self.oldXData
+            self.yData = self.oldYData
+
+
         if self.listener.COUNTER % 100 == 0:
             self.ax.lines.remove(self.ax.lines[0])
             self.rand_x = np.random.random_integers(0, self.axis_width * 0.5)
             self.rand_y = np.random.random_integers(0, self.axis_height * 0.5)
-            self.ax.plot([self.rand_x + 100, self.rand_x + 100], [self.rand_y + 100, self.rand_y + 100], 'bo',
+            self.ax.plot([self.rand_x + 100, self.rand_x + 100], [self.rand_y + 100, self.rand_y + 100], 'bs',
                          markersize=self.boundary)
+
         if self.listener.COUNTER - self.leadIn < 0:
+
+            self.listener.color = 'B'
             self.ax.plot(self.xData, self.yData, 'bo', markersize=10)
+
         elif self.listener.COUNTER - self.leadIn >= 0:
-            self.ax.plot(self.xData, self.yData, 'ro', markersize=10)
+
+            if self.xData - (self.rand_x + 100) < (self.boundary / 2) \
+                    and (self.rand_x + 100) - self.xData < (self.boundary / 2) \
+                    and self.yData - (self.rand_y + 100) < (self.boundary / 2) \
+                    and (self.rand_y + 100) - self.yData < (self.boundary / 2):
+
+                self.listener.color = 'Y'
+                self.ax.plot(self.xData, self.yData, 'yo', markersize=10)
+
+            else:
+
+                self.listener.color = 'R'
+                self.ax.plot (self.xData, self.yData, 'ro', markersize=10)
 
         #  Set the colour of the indicator to inform the user of the speed to generate
         if self.listener.COUNTER >= self.test_length:
