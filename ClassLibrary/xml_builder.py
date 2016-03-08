@@ -79,6 +79,8 @@ class Operation_XML_Builder():
         self.color.text = str(color)
         self.dataPoint.append(self.color)
 
+
+
     def exit_handler(self):
 
         print "Saving Data..."
@@ -87,7 +89,7 @@ class Operation_XML_Builder():
 
         rough_string = ET.tostring(self.root, 'utf-8')
         reparsed = minidom.parseString(rough_string)
-        output_file = open('tmp/XML_' + self.docName + '.xhtml', 'w')
+        output_file = open('tmp/' + self.docName + '.xhtml', 'w')
         output_file.write(reparsed.toprettyxml(indent= "    "))
         output_file.close()
 
@@ -146,3 +148,21 @@ class Test_XML_Builder(Operation_XML_Builder):
         self.boundary = ET.Element("Boundary")
         self.boundary.text = str(boundary)
         self.testinfo.append(self.boundary)
+
+    def append_transient_test_details(self, test_object):
+
+        testtype = test_object.test_instance.testtype
+
+        if str(testtype) == "2":
+
+            self.transient = ET.Element("TransientTestData")
+            self.transient.text = str("")
+            self.dataPoint.append(self.transient)
+
+            self.xSpot = ET.Element("XPosCurrentSpot")
+            self.xSpot.text = str(test_object.rand_x + 100)
+            self.transient.append(self.xSpot)
+
+            self.ySpot = ET.Element("YPosCurrentSpot")
+            self.ySpot.text = str (test_object.rand_y + 100)
+            self.transient.append(self.ySpot)

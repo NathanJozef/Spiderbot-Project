@@ -41,8 +41,12 @@ class Client_Tool_Watcher(leap.Listener):
     def grabData(self, tool):
 
         self.xPos = tool.tip_position[0] + 250
-        self.yPos = tool.tip_position[1] * (500/300)
-        self.zPos = (tool.tip_position[2] + 250) * (500/300)
+        self.yPos = tool.tip_position[1] * (400/300)
+        self.zPos = (tool.tip_position[2] + 250) * (400/300)
+
+        #self.xPos = tool.tip_position[0]
+        #self.yPos = tool.tip_position[1]
+        #self.zPos = tool.tip_position[2]
 
         self.xVel = tool.tip_velocity[0]
         self.yVel = tool.tip_velocity[1]

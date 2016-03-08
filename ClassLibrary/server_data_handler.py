@@ -65,7 +65,7 @@ class server_data_handler:
     def unpickle_data_for_Labview(self):
 
         picklefile = open("tmp/smallPickle", 'rb')
-        LabView_Pos_String = pickle.load((picklefile))
+        LabView_Pos_String = pickle.load(picklefile)
         picklefile.close()
 
         return LabView_Pos_String
