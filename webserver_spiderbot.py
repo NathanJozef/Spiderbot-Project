@@ -6,8 +6,6 @@ import pickle, atexit
 print ""
 print "Connected to Server..."
 print ""
-print "Set Test Flag"
-print ""
 
 test = 'Y'
 

@@ -174,3 +174,19 @@ class Test_XML_Builder(Operation_XML_Builder):
             self.ySpot = ET.Element("YPosCurrentSpot")
             self.ySpot.text = str (test_object.rand_y + 100)
             self.transient.append(self.ySpot)
+
+class Accuracy_Test_Builder(Operation_XML_Builder):
+
+    def save_accuracy_parameters(self, indX, indY):
+
+        self.IndicatedValues = ET.Element("IndicatedValues")
+        self.IndicatedValues.text = str("")
+        self.dataPoint.append(self.IndicatedValues)
+
+        self.indX = ET.Element("IndicatedX")
+        self.indX.text = str(indX)
+        self.IndicatedValues.append(self.indX)
+
+        self.indY = ET.Element("IndicatedY")
+        self.indY.text = str(indY)
+        self.IndicatedValues.append(self.indY)

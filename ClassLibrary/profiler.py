@@ -10,6 +10,9 @@ class Profiler():
         self.linear_coefficients = [1, 1, 1]
         self.vertical_coefficients = [1, 1, 1]
         self.accuracy_coefficients = [1, 1]
+        self.linear_updates = 1.0
+        self.vertical_updates = 1.0
+        self.accuracy_updates = 1.0
 
         if os.path.exists('Profiles/' + self.profile_filename):
             self.open_existing_file()
@@ -33,6 +36,7 @@ class Profiler():
             self.linear_coefficients[0] = float('{0:.2f}'.format((coefficients[0] + self.linear_coefficients[0]) / 2))
             self.linear_coefficients[1] = float('{0:.2f}'.format((coefficients[1] + self.linear_coefficients[1]) / 2))
             self.linear_coefficients[2] = float('{0:.2f}'.format((coefficients[2] + self.linear_coefficients[2]) / 2))
+            self.linear_updates += 1.0
 
         self.save_to_picklefile()
 
@@ -48,6 +52,7 @@ class Profiler():
             self.vertical_coefficients[0] = float('{0:.2f}'.format((coefficients[0] + self.vertical_coefficients[0]) / 2))
             self.vertical_coefficients[1] = float('{0:.2f}'.format((coefficients[1] + self.vertical_coefficients[1]) / 2))
             self.vertical_coefficients[2] = float('{0:.2f}'.format((coefficients[2] + self.vertical_coefficients[2]) / 2))
+            self.vertical_updates += 1.0
 
         self.save_to_picklefile()
 
@@ -61,6 +66,7 @@ class Profiler():
         elif self.accuracy_coefficients != [1, 1]:
             self.accuracy_coefficients[0] = float('{0:.2f}'.format((coefficients[0] + self.accuracy_coefficients[0]) / 2))
             self.accuracy_coefficients[1] = float('{0:.2f}'.format((coefficients[1] + self.accuracy_coefficients[1]) / 2))
+            self.accuracy_updates += 1.0
 
         self.save_to_picklefile()
 

@@ -1,4 +1,5 @@
 import LeapControllers.leap as leap
+from ClassLibrary.tracker import VideoWatcher
 
 def create():
 
@@ -8,6 +9,13 @@ def create():
     controller.add_listener(listener)
 
 class Client_Tool_Watcher(leap.Listener):
+
+    def build_video(self):
+        self.vid = VideoWatcher()
+
+    def run_video(self):
+        self.indX, self.indY = self.vid.video_tracker()
+        return self.indX, self.indY
 
     def buildForUI(self):
 

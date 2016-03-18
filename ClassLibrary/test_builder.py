@@ -17,8 +17,8 @@ class TestBuilder:
 
         print '\n**** ENTER YOU INFORMATION ****\n'
 
-        self.name = 'Nathan'
-        self.conditions = 'Testing'
+        self.name = 'Jamie'
+        self.conditions = 'Sleep Dep 4'
         self.profession = 'Engineer'
 
         #self.name = raw_input('Enter your name: ')
