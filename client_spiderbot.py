@@ -15,33 +15,35 @@ print 'Starting...'
 class ClientProtocol(protocol.Protocol):
 
     def __init__(self, factory):
+
         self.factory = factory
 
         # Comment Out Under Normal Operation. For Accuracy Tracker Only.
-        listener.build_video()
-        listener.buildForUI()
-        self.file_bulder = Accuracy_Test_Builder("Accuaracy_Test")
-        self.file_bulder.createXMLfile()
-        atexit.register(self.file_bulder.exit_handler)
+        #listener.build_video()
+        #listener.buildForUI()
+        #self.file_bulder = Accuracy_Test_Builder("Accuaracy_Test")
+        #self.file_bulder.createXMLfile()
+        #atexit.register(self.file_bulder.exit_handler)
 
     def connectionMade(self):
         self.sendData()
 
     def sendData(self):
+
         self.transport.write(data)
         #  time.sleep(0.04) ## Uncomment when using home machine as host
 
     def SendModData(self):
+
         self.transport.write(listener.compString)
 
         # Comment Out Under Normal Operation. For Accuracy Tracker Only.
-        indX, indY = listener.run_video()
-        self.file_bulder.append_user_movement_data_to_xml(listener)
-        self.file_bulder.save_accuracy_parameters("{0:.0f}".format(indX), "{0:.0f}".format(indY))
-
-        print "Video Information:"
-        print "Indicated x Position: {0:.0f}".format(indX)
-        print "Indicated y Position: {0:.0f}".format(indY)
+        #indX, indY = listener.run_video()
+        #self.file_bulder.append_user_movement_data_to_xml(listener)
+        #self.file_bulder.save_accuracy_parameters("{0:.0f}".format(indX), "{0:.0f}".format(indY))
+        #print "Video Information:"
+        #print "Indicated x Position: {0:.0f}".format(indX)
+        #print "Indicated y Position: {0:.0f}".format(indY)
 
     def dataReceived(self, data):
         print "Server Response:\n", data

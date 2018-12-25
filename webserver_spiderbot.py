@@ -7,7 +7,7 @@ print ""
 print "Connected to Server..."
 print ""
 
-test = 'Y'
+test = "Y"
 
 XMLFrame = Operation_XML_Builder('Server_Tx')
 XMLFrame.createXMLfile()
@@ -52,9 +52,6 @@ class Echo(protocol.Protocol):
 
     def dataReceived(self, data):
 
-        # This is only a technical test script.
-        # Raw positional data is transmitted only persists in
-        # a Technical Test File until the next Technical Test.
         if test == "Y":
 
             current_frame = server_data_handler()  # Create instance object for the current frame

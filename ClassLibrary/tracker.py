@@ -20,13 +20,13 @@ class VideoWatcher:
 
     def __init__(self):
 
-        self.cap = cv2.VideoCapture(1)
+        self.cap = cv2.VideoCapture(0)
         self.ret, self.frame = self.cap.read()
 
         # take first frame of the video
         #ret, frame = cap.read()
 
-        self.redLower = (45, 50, 50)
+        self.redLower = (45, 40, 40)
         self.redUpper = (90, 255, 255)
 
         self.pts = deque(maxlen=args["buffer"])
@@ -50,7 +50,7 @@ class VideoWatcher:
             self.hsv = cv2.cvtColor(self.frame, cv2.COLOR_BGR2HSV)
 
             self.mask = cv2.inRange(self.hsv, self.redLower, self.redUpper)
-            self.mask = cv2.erode(self.mask, None, iterations=2)
+            self.mask = cv2.erode(self.mask, None, iterations=1)
             self.mask = cv2.dilate(self.mask, None, iterations=2)
 
             self.cnts = cv2.findContours(self.mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
@@ -83,7 +83,7 @@ class VideoWatcher:
                 # Draw it on image
                 # show the frame to our screen and increment the frame counter
                 cv2.imshow("Frame", self.frame)
-                #cv2.imshow("Mask", mask)
+                #cv2.imshow("Mask", self.mask)
 
                 self.key = cv2.waitKey(1) & 0xFF
 
